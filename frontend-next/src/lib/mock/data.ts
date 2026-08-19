@@ -1,0 +1,471 @@
+import type {
+  AgentSettings,
+  BillingInfo,
+  ConversationDetail,
+  ConversationSummary,
+  DashboardData,
+  Lead,
+  LeadDetail,
+  ListeningItem,
+  MediaAsset,
+  MessageTemplate,
+  TeamMember,
+} from "@/types";
+
+export const mockDashboard: DashboardData = {
+  companyName: "Northline Studio",
+  agentEnabled: true,
+  waStatus: "CONNECTED",
+  usage: {
+    conversationsUsed: 142,
+    conversationsQuota: 500,
+    messagesSent: 890,
+    mediaStoredMb: 420,
+    mediaQuotaMb: 1024,
+  },
+  stats: {
+    activeConversations: 12,
+    hotLeads: 4,
+    meetingsBookedWeek: 3,
+    messagesSentToday: 47,
+  },
+  activity: [
+    {
+      id: "a1",
+      title: "AI replied to Priya Sharma",
+      detail: "Qualified as HOT — website redesign inquiry",
+      eventType: "ai_reply",
+      createdAt: new Date(Date.now() - 5 * 60_000).toISOString(),
+    },
+    {
+      id: "a2",
+      title: "Meeting proposed",
+      detail: "Booking link sent to Alex Chen",
+      eventType: "meeting",
+      createdAt: new Date(Date.now() - 28 * 60_000).toISOString(),
+    },
+    {
+      id: "a3",
+      title: "Human takeover enabled",
+      detail: "You paused the agent on thread with Ravi Patel",
+      eventType: "takeover",
+      createdAt: new Date(Date.now() - 55 * 60_000).toISOString(),
+    },
+    {
+      id: "a4",
+      title: "Listening draft ready",
+      detail: "Group: Indie Hackers Delhi — web dev ask",
+      eventType: "listening",
+      createdAt: new Date(Date.now() - 90 * 60_000).toISOString(),
+    },
+  ],
+  needsAttention: [
+    {
+      id: "n1",
+      kind: "listening",
+      title: "2 listening drafts awaiting approval",
+      href: "/listening",
+    },
+    {
+      id: "n2",
+      kind: "takeover",
+      title: "1 conversation on human takeover",
+      href: "/conversations/c2",
+    },
+  ],
+};
+
+export const mockConversations: ConversationSummary[] = [
+  {
+    id: "c1",
+    leadId: "l1",
+    contactName: "Priya Sharma",
+    lastMessage: "Can you share portfolio examples?",
+    updatedAt: new Date(Date.now() - 3 * 60_000).toISOString(),
+    stage: "HOT",
+    unread: 2,
+    humanTakeover: false,
+    within24hWindow: true,
+    doNotContact: false,
+  },
+  {
+    id: "c2",
+    leadId: "l2",
+    contactName: "Ravi Patel",
+    lastMessage: "Let me check with my co-founder",
+    updatedAt: new Date(Date.now() - 40 * 60_000).toISOString(),
+    stage: "WARM",
+    unread: 0,
+    humanTakeover: true,
+    within24hWindow: true,
+    doNotContact: false,
+  },
+  {
+    id: "c3",
+    leadId: "l3",
+    contactName: "Alex Chen",
+    lastMessage: "Thanks, booked for Thursday",
+    updatedAt: new Date(Date.now() - 2 * 3600_000).toISOString(),
+    stage: "CONVERTED",
+    unread: 0,
+    humanTakeover: false,
+    within24hWindow: true,
+    doNotContact: false,
+  },
+  {
+    id: "c4",
+    leadId: "l4",
+    contactName: "Stop Contact",
+    lastMessage: "stop",
+    updatedAt: new Date(Date.now() - 5 * 3600_000).toISOString(),
+    stage: "COLD",
+    unread: 0,
+    humanTakeover: false,
+    within24hWindow: false,
+    doNotContact: true,
+  },
+];
+
+export const mockConversationDetails: Record<string, ConversationDetail> = {
+  c1: {
+    ...mockConversations[0],
+    score: 87,
+    messages: [
+      {
+        id: "m1",
+        role: "user",
+        text: "Hi, I need a website for my restaurant in Mumbai.",
+        timestamp: new Date(Date.now() - 20 * 60_000).toISOString(),
+      },
+      {
+        id: "m2",
+        role: "agent",
+        text: "Hi — I'm PrePop AI for Northline Studio. Happy to help with restaurant sites. What's your timeline and approx budget?",
+        timestamp: new Date(Date.now() - 19 * 60_000).toISOString(),
+        status: "read",
+      },
+      {
+        id: "m3",
+        role: "user",
+        text: "Within 4 weeks. Budget around ₹80k. Can you share portfolio examples?",
+        timestamp: new Date(Date.now() - 3 * 60_000).toISOString(),
+      },
+    ],
+  },
+  c2: {
+    ...mockConversations[1],
+    score: 64,
+    messages: [
+      {
+        id: "m4",
+        role: "user",
+        text: "Looking for a landing page for our SaaS.",
+        timestamp: new Date(Date.now() - 2 * 3600_000).toISOString(),
+      },
+      {
+        id: "m5",
+        role: "agent",
+        text: "Hi — I'm PrePop AI for Northline Studio. We build conversion-focused landing pages. Want a quick discovery call?",
+        timestamp: new Date(Date.now() - 110 * 60_000).toISOString(),
+        status: "delivered",
+      },
+      {
+        id: "m6",
+        role: "human",
+        text: "Sure — I'm taking over from the AI. Happy to walk you through options.",
+        timestamp: new Date(Date.now() - 50 * 60_000).toISOString(),
+        status: "read",
+      },
+      {
+        id: "m7",
+        role: "user",
+        text: "Let me check with my co-founder",
+        timestamp: new Date(Date.now() - 40 * 60_000).toISOString(),
+      },
+    ],
+  },
+  c3: {
+    ...mockConversations[2],
+    score: 92,
+    messages: [
+      {
+        id: "m8",
+        role: "user",
+        text: "Need a portfolio site.",
+        timestamp: new Date(Date.now() - 5 * 3600_000).toISOString(),
+      },
+      {
+        id: "m9",
+        role: "agent",
+        text: "Hi — I'm PrePop AI for Northline Studio. Here's a booking link for a 20-min call.",
+        timestamp: new Date(Date.now() - 4 * 3600_000).toISOString(),
+        status: "read",
+      },
+      {
+        id: "m10",
+        role: "user",
+        text: "Thanks, booked for Thursday",
+        timestamp: new Date(Date.now() - 2 * 3600_000).toISOString(),
+      },
+    ],
+  },
+  c4: {
+    ...mockConversations[3],
+    score: 10,
+    messages: [
+      {
+        id: "m11",
+        role: "user",
+        text: "stop",
+        timestamp: new Date(Date.now() - 5 * 3600_000).toISOString(),
+      },
+    ],
+  },
+};
+
+export const mockLeads: Lead[] = [
+  {
+    id: "l1",
+    name: "Priya Sharma",
+    phoneMasked: "+91 •••• ••4321",
+    status: "IN_PROGRESS",
+    intentLabel: "HOT",
+    score: 87,
+    serviceInterest: "Restaurant website",
+    source: "AD",
+    lastInboundAt: new Date(Date.now() - 3 * 60_000).toISOString(),
+    meetingStatus: "not_proposed",
+    doNotContact: false,
+  },
+  {
+    id: "l2",
+    name: "Ravi Patel",
+    phoneMasked: "+91 •••• ••8890",
+    status: "IN_PROGRESS",
+    intentLabel: "WARM",
+    score: 64,
+    serviceInterest: "SaaS landing page",
+    source: "DIRECT",
+    lastInboundAt: new Date(Date.now() - 40 * 60_000).toISOString(),
+    meetingStatus: "proposed",
+    doNotContact: false,
+  },
+  {
+    id: "l3",
+    name: "Alex Chen",
+    phoneMasked: "+1 ••• ••• 1122",
+    status: "CONVERTED",
+    intentLabel: "HOT",
+    score: 92,
+    serviceInterest: "Portfolio site",
+    source: "WIDGET",
+    lastInboundAt: new Date(Date.now() - 2 * 3600_000).toISOString(),
+    meetingStatus: "booked",
+    doNotContact: false,
+  },
+  {
+    id: "l4",
+    name: "Stop Contact",
+    phoneMasked: "+91 •••• ••0000",
+    status: "FAILED",
+    intentLabel: "COLD",
+    score: 10,
+    serviceInterest: "Unknown",
+    source: "GROUP",
+    lastInboundAt: new Date(Date.now() - 5 * 3600_000).toISOString(),
+    meetingStatus: "none",
+    doNotContact: true,
+  },
+  {
+    id: "l5",
+    name: "Meera Joshi",
+    phoneMasked: "+91 •••• ••5566",
+    status: "NEW",
+    intentLabel: null,
+    score: 45,
+    serviceInterest: "Clinic booking site",
+    source: "DIRECT",
+    lastInboundAt: new Date(Date.now() - 8 * 3600_000).toISOString(),
+    meetingStatus: "none",
+    doNotContact: false,
+  },
+  {
+    id: "l6",
+    name: "Omar Farooq",
+    phoneMasked: "+971 ••• ••• 3344",
+    status: "IN_PROGRESS",
+    intentLabel: "WARM",
+    score: 71,
+    serviceInterest: "E-commerce redesign",
+    source: "AD",
+    lastInboundAt: new Date(Date.now() - 12 * 3600_000).toISOString(),
+    meetingStatus: "proposed",
+    doNotContact: false,
+  },
+];
+
+export const mockLeadDetails: Record<string, LeadDetail> = {
+  l1: {
+    ...mockLeads[0],
+    conversationId: "c1",
+    consentLabel: "Opt-in · inbound · Mar 12",
+    requirementSummary: "Restaurant website in Mumbai, 4-week timeline, ~₹80k budget.",
+    messages: [],
+    memoryFacts: [
+      { id: "f1", category: "service", fact: "Restaurant website", source: "stated", confidence: 95 },
+      { id: "f2", category: "budget", fact: "Around ₹80,000", source: "stated", confidence: 90 },
+      { id: "f3", category: "timeline", fact: "Within 4 weeks", source: "stated", confidence: 92 },
+      { id: "f4", category: "preference", fact: "Wants portfolio examples", source: "stated", confidence: 88 },
+    ],
+  },
+  l2: {
+    ...mockLeads[1],
+    conversationId: "c2",
+    consentLabel: "Opt-in · inbound · Mar 11",
+    messages: [],
+    memoryFacts: [
+      { id: "f5", category: "service", fact: "SaaS landing page", source: "stated", confidence: 90 },
+    ],
+  },
+};
+
+export const mockListening: ListeningItem[] = [
+  {
+    id: "li1",
+    groupName: "Indie Hackers Delhi",
+    originalMessage: "Anyone know a good web developer for a restaurant site?",
+    matchReason: "keyword",
+    draftReply:
+      "Hey! I help restaurants ship modern sites — happy to share a couple of recent builds if useful.",
+    createdAt: new Date(Date.now() - 25 * 60_000).toISOString(),
+    status: "sent",
+  },
+  {
+    id: "li2",
+    groupName: "Founders Circle",
+    originalMessage: "Looking for someone to rebuild our marketing site this month.",
+    matchReason: "semantic",
+    draftReply:
+      "Hi — I build conversion-focused marketing sites for early-stage teams. Want a quick intro call?",
+    createdAt: new Date(Date.now() - 70 * 60_000).toISOString(),
+    status: "sent",
+  },
+  {
+    id: "li3",
+    groupName: "Local Biz WhatsApp",
+    originalMessage: "Need a clinic appointment booking website urgently.",
+    matchReason: "keyword",
+    draftReply:
+      "Hi! I build booking sites for clinics. I can share a relevant example if you'd like.",
+    createdAt: new Date(Date.now() - 3 * 3600_000).toISOString(),
+    status: "blocked",
+    blockReason: "daily_quota_exceeded",
+  },
+];
+
+export const mockTemplates: MessageTemplate[] = [
+  {
+    id: "t1",
+    name: "followup_discovery",
+    language: "en",
+    status: "approved",
+    body: "Hi {{name}}, following up on your interest in {{service}}. Book a call: {{link}}",
+    lastUsedAt: new Date(Date.now() - 2 * 86400_000).toISOString(),
+  },
+  {
+    id: "t2",
+    name: "reengage_warm",
+    language: "en",
+    status: "pending",
+    body: "Hi {{name}}, still exploring a website? Happy to help when you're ready.",
+  },
+  {
+    id: "t3",
+    name: "meeting_confirm",
+    language: "en",
+    status: "approved",
+    body: "Confirmed — see you {{date}} for our discovery call.",
+    lastUsedAt: new Date(Date.now() - 5 * 86400_000).toISOString(),
+  },
+  {
+    id: "t4",
+    name: "promo_old",
+    language: "en",
+    status: "rejected",
+    body: "Special offer this week only...",
+  },
+];
+
+export const mockMedia: MediaAsset[] = [
+  {
+    id: "med1",
+    type: "image",
+    name: "restaurant-portfolio-1.jpg",
+    tags: ["portfolio", "restaurant"],
+    usedByAgent: true,
+    url: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400",
+    sizeMb: 1.2,
+  },
+  {
+    id: "med2",
+    type: "image",
+    name: "saas-landing.jpg",
+    tags: ["portfolio", "product"],
+    usedByAgent: true,
+    url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400",
+    sizeMb: 0.9,
+  },
+  {
+    id: "med3",
+    type: "image",
+    name: "clinic-ui.jpg",
+    tags: ["portfolio"],
+    usedByAgent: false,
+    url: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400",
+    sizeMb: 1.1,
+  },
+  {
+    id: "med4",
+    type: "video",
+    name: "walkthrough.mp4",
+    tags: ["product"],
+    usedByAgent: false,
+    url: "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=400",
+    sizeMb: 12.4,
+  },
+];
+
+export const mockSettings: AgentSettings = {
+  brandName: "Northline Studio",
+  businessDescription: "We build conversion-focused websites for SMBs and startups.",
+  services: ["Website design", "Landing pages", "Booking sites"],
+  tone: "friendly_professional",
+  offer: "Free 20-min discovery call",
+  bookingLink: "https://cal.com/northline/intro",
+  businessHours: "Mon–Fri 10:00–19:00 IST",
+  disclosureLine: "Hi — I'm PrePop AI for Northline Studio.",
+  agentEnabled: true,
+};
+
+export const mockTeam: TeamMember[] = [
+  { id: "u1", name: "Garv Sanwariya", email: "owner@northline.dev", role: "owner" },
+  { id: "u2", name: "Aisha Khan", email: "aisha@northline.dev", role: "admin" },
+  { id: "u3", name: "Dev Agent", email: "agent@northline.dev", role: "agent" },
+];
+
+export const mockBilling: BillingInfo = {
+  plan: "Growth",
+  status: "Active",
+  renewDate: "2026-09-01",
+  priceLabel: "$79/mo",
+  usage: {
+    conversationsUsed: 142,
+    conversationsQuota: 500,
+    numbersUsed: 1,
+    numbersQuota: 2,
+    seatsUsed: 2,
+    seatsQuota: 5,
+    mediaStoredMb: 420,
+    mediaQuotaMb: 1024,
+  },
+};

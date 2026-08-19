@@ -1,0 +1,190 @@
+/* ─── Design tokens scoped to the landing page wrapper ─── */
+.relay-landing {
+  --ink:        #0a0a0a;
+  --ink-soft:   #141414;
+  --paper:      #ffffff;
+  --off:        #f3f3f1;
+  --mute:       #6f6f6f;
+  --mute-soft:  #9a9a9a;
+  --line:       #e4e4e2;
+  --line-strong:#0a0a0a;
+  --line-dark:  #2c2c2c;
+  --signal:     #128c4b;
+  --signal-deep:#0e7a41;
+  --grid:       rgba(10, 10, 10, 0.06);
+
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-geist-sans), var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Override Tailwind classes to use landing tokens ─── */
+.relay-landing .border-line        { border-color: var(--line); }
+.relay-landing .border-line-dark   { border-color: var(--line-dark); }
+.relay-landing .bg-paper           { background-color: var(--paper); }
+.relay-landing .bg-off             { background-color: var(--off); }
+.relay-landing .bg-ink             { background-color: var(--ink); }
+.relay-landing .bg-ink-soft        { background-color: var(--ink-soft); }
+.relay-landing .bg-signal          { background-color: var(--signal); }
+.relay-landing .bg-signal-deep     { background-color: var(--signal-deep); }
+.relay-landing .text-ink           { color: var(--ink); }
+.relay-landing .text-ink-soft      { color: var(--ink-soft); }
+.relay-landing .text-mute          { color: var(--mute); }
+.relay-landing .text-mute-soft     { color: var(--mute-soft); }
+.relay-landing .text-signal        { color: var(--signal); }
+.relay-landing .text-signal-deep   { color: var(--signal-deep); }
+.relay-landing .text-paper         { color: var(--paper); }
+
+/* ─── Typography utilities ─── */
+.relay-landing .font-display {
+  font-family: var(--font-geist-sans), var(--font-inter), system-ui, sans-serif;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
+  font-weight: 600;
+}
+
+.relay-landing .meta {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+.relay-landing .meta-ink {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.relay-landing .headline-xl {
+  font-size: clamp(2.75rem, 8.5vw, 7.5rem);
+  letter-spacing: -0.045em;
+  line-height: 0.9;
+  font-weight: 600;
+}
+
+.relay-landing .headline-lg {
+  font-size: clamp(2.25rem, 6vw, 5.25rem);
+  letter-spacing: -0.04em;
+  line-height: 0.92;
+  font-weight: 600;
+}
+
+.relay-landing .headline-md {
+  font-size: clamp(1.75rem, 4vw, 3.5rem);
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+  font-weight: 600;
+}
+
+/* ─── Layout ─── */
+.relay-landing .section-pad {
+  padding-inline: clamp(1rem, 4vw, 3rem);
+}
+
+.relay-landing .rule {
+  height: 1px;
+  background: var(--line);
+  width: 100%;
+}
+
+.relay-landing .rule-dark {
+  height: 1px;
+  background: var(--line-dark);
+  width: 100%;
+}
+
+.relay-landing .hairline {
+  border-color: var(--line);
+}
+
+/* ─── Grid backgrounds ─── */
+.relay-landing .grid-bg {
+  background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.relay-landing .grid-bg-dark {
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* ─── Grain overlays ─── */
+.relay-landing .grain::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.045;
+  background-image: url("/textures/grain.png");
+  background-size: 220px 220px;
+  mix-blend-mode: multiply;
+  z-index: 1;
+}
+
+.relay-landing .grain-dark::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.08;
+  background-image: url("/textures/grain.png");
+  background-size: 220px 220px;
+  mix-blend-mode: screen;
+  z-index: 1;
+}
+
+/* ─── Animations ─── */
+@keyframes relay-pulse-node {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(18, 140, 75, 0.35); }
+  50%       { box-shadow: 0 0 0 6px rgba(18, 140, 75, 0); }
+}
+
+@keyframes relay-draw-line {
+  from { stroke-dashoffset: 100; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes relay-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0.25; }
+}
+
+.relay-landing .animate-pulse-node {
+  animation: relay-pulse-node 2.4s ease-in-out infinite;
+}
+
+.relay-landing .animate-blink {
+  animation: relay-blink 1.4s steps(1) infinite;
+}
+
+/* ─── Nav bg ─── */
+.relay-landing .bg-paper\/92 {
+  background-color: rgba(255, 255, 255, 0.92);
+}
+
+/* ─── Selection color ─── */
+.relay-landing ::selection {
+  background: var(--signal);
+  color: white;
+}
+
+.relay-landing :focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .relay-landing .animate-pulse-node,
+  .relay-landing .animate-blink {
+    animation: none !important;
+  }
+}

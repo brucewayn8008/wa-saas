@@ -1,0 +1,39 @@
+# Python
+venv/
+venv*/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+dist/
+
+# Go
+go-gateway/main
+*.session
+*.session-journal
+
+# Env & secrets — NEVER commit
+.env
+.env.*
+!.env.example
+
+# Local artifacts
+.DS_Store
+ops/logs/
+*.log
+.playwright-mcp/
+ngrok.log
+frontend-next/.clerk/
+frontend-next/test-results/
+frontend-next/playwright-report/
+coverage/
+htmlcov/
+
+# Media (local dev uploads — use object storage in prod)
+backend/media/
